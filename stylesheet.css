@@ -1,0 +1,56 @@
+*{
+	font-family: 'DejaVu Sans', 'Calibri';
+	color:#D9EAB3;
+	text-align:center;
+	}
+body {
+	background-color: #B4D09D;
+	}
+@font-face{ 
+	font-family: 'punk';
+	url('Skratch_Punk.otf') format('opentype');
+		}	
+#cialo{
+	width: 100%;
+	text-align: left;
+ 	margin: 0 auto 0 auto; 
+	}
+#logo {
+	position:relative;
+	background-image:url("obrazy/ziemia4.jpg");
+	background-size:cover;
+    height: 140px;
+    width: 100%;
+    border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	padding-top: 5px;
+	padding-right:8px;
+	padding-bottom: 15px;
+	}
+#menu{
+	float: left;
+	margin-top:4px;
+	width: 18%;
+	height: 400px;
+	}
+#map{height:850px;
+	margin-top:4px;
+float:left;
+width:82%;
+background-color:#9ACB58; 
+}
+.przycisk{
+padding: 3px;
+border-radius:5px;
+width:95%;
+min-height:35px;
+background-color:#2F913E; 
+margin-bottom:6px;
+}
+h1{
+	font-family:"Skratch Punk", "punk";
+	text-align: center;
+	color: #245100;
+	margin-top:5px;
+	margin-bottom:5px;
+	font-size:40px;}
