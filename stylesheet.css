@@ -33,7 +33,7 @@ body {
 	width: 18%;
 	height: 400px;
 	}
-#map{height:850px;
+#map{height:750px;
 	margin-top:4px;
 float:left;
 width:82%;
@@ -46,6 +46,9 @@ width:95%;
 min-height:35px;
 background-color:#2F913E; 
 margin-bottom:6px;
+}
+form{
+	margin-bottom:10px;
 }
 h1{
 	font-family:"Skratch Punk", "punk";
