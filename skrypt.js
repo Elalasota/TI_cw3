@@ -64,21 +64,26 @@ reset();
 	
 var przezroczystosc=false;
 var forma='image/jpeg';
-
-function wysylanie(){var wart=$( "input[type='radio']:checked" ).val();
+var wart="";
+var style="";
+var wersja='1.1.1';
+var ukl=null;
+function wysylanie(){
+	if($( "input[type='radio']:checked" )){wart=$( "input[type='radio']:checked" ).val();}
 	if (wart=="tak"){
 		console.log("Tak");
 		przezroczytosc=true;}
 	else{przezroczytosc=false; console.log("Nie");}
-	
-	if (wiadomosc($("#format"))==true){var forma=$("#format").val();}
+	if (wiadomosc2($("#style"))==true){style=$("#style").val();}
+	if (wiadomosc2($("#format"))==true){forma=$("#format").val();}
+	if (wiadomosc2($("#wersja"))==true){wersja=$("#wersja").val();}
+	if (wiadomosc2($("#crs"))==true){ukl=$("#crs").val();}
 	var spr=wiadomosc($("#wms"));
-		var spr1=wiadomosc($("#warstwy"));
-		if (spr==true&&spr1==true){
+	var spr1=wiadomosc($("#warstwy"));
+	if (spr==true&&spr1==true){
 			var adres=$("#wms").val();
 			var warstwy=$("#warstwy").val();
-			var crs=$("#crs").val();
-			var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczytosc});
+			var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczytosc, styles:style, version:wersja, crs:ukl});
 			nexrad.addTo(map);
 			war.addOverlay(nexrad, 'wms');
 			kontrola.push(nexrad);
@@ -113,6 +118,18 @@ function wiadomosc(typ){
         else{$(this).removeClass("error");};
 		});
 	return wyn;}
+
+function wiadomosc2(typ){
+	var wyn=true;
+	console.log(typ.length);
+	$.each(typ, function(key, object){
+		console.log($(this).val());
+        if ($(this).val()==false ){
+            wyn=false;}
+		});
+	return wyn;}
+
+
 
 var marki=L.layerGroup();
 var adno=L.layerGroup();
