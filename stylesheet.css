@@ -48,8 +48,22 @@ background-color:#2F913E;
 margin-bottom:6px;
 }
 form{
+	font-size:12px;
 	margin-bottom:10px;
 }
+#wms{
+	color:#001C03;
+	text-align:left;
+}
+#warstwy{
+	color:#001C03;
+	text-align:left;
+}
+#crs{
+	color:#001C03;
+	text-align:left;
+}
+
 h1{
 	font-family:"Skratch Punk", "punk";
 	text-align: center;
@@ -57,3 +71,29 @@ h1{
 	margin-top:5px;
 	margin-bottom:5px;
 	font-size:40px;}
+	
+.error{
+	border:solid;
+	border-color:#FF2930;
+	background-color: #FFA4A0;
+}
+p{
+	font-size: 14px;
+	margin:7px 20px;
+	text-indent:15px;
+}
+#wyslij{
+	margin:0 auto;
+	background-color:#2F913E;
+	margin-bottom:5px;
+	width:40%;
+	border-radius:5px;
+}
+#opcje{
+	border-radius:5px;
+	margin:5px;
+	padding:4px;
+	border:solid;
+	border-color:#2F913E;
+}
+#op{font-size:12px;}

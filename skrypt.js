@@ -6,8 +6,8 @@ var widok=new L.LatLng(51.11, 17.04);
 var zum=12;
 map.setView(widok,zum);
 map.addLayer(osm);
-$("form").hide();
-
+$("#formularz").hide();
+var kontrola=[];
 var flagi=[];
 for(i=0;i<$('.przycisk').size();i++ ){
 	flagi.push(false);}
@@ -33,6 +33,7 @@ reset();
 		console.log("usun");
 		flagi[1]=true;
 	 	marki.clearLayers();
+	 	adno.clearLayers();
 	}
 	else if (wartosc==="Dodaj adnotację"){
 		flagi[2]=true;
@@ -46,26 +47,52 @@ reset();
 	}
 		else if (wartosc==="Dodaj WMS"){
 		flagi[5]=true;
-		$("form").toggle();
+		$("#formularz").toggle();
 		
+	}
+	else if (wartosc==="Usuń warstwy WMS"){
+		//console.log(kontrola[0]);
+		flagi[6]=true;
+		for(i=0;i<kontrola.length;i++){
+			console.log(kontrola[i]);
+			map.removeLayer(kontrola[i]);
+			war.removeLayer(kontrola[i]);}
 	}
 		else if (wartosc==="Przywróć zasięg"){
 		flagi[7]=true;
-		map.setView(widok,zum);
-	}
-});
-$("#wms").keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);
-	if(keycode == '13'){
-		var adres=$(this).val();	
-	}});
-$("#warstwy").keypress(function(event){var keycode = (event.keyCode ? event.keyCode : event.which);
-	if(keycode == '13'){
-		var warstwy=$(this).val();	
-	}}
+		map.setView(widok,zum);}});
 	
-	);	
+var przezroczystosc=false;
+var forma='image/jpeg';
 
+function wysylanie(){var wart=$( "input[type='radio']:checked" ).val();
+	if (wart=="tak"){
+		console.log("Tak");
+		przezroczytosc=true;}
+	else{przezroczytosc=false; console.log("Nie");}
+	
+	if (wiadomosc($("#format"))==true){var forma=$("#format").val();}
+	var spr=wiadomosc($("#wms"));
+		var spr1=wiadomosc($("#warstwy"));
+		if (spr==true&&spr1==true){
+			var adres=$("#wms").val();
+			var warstwy=$("#warstwy").val();
+			var crs=$("#crs").val();
+			var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczytosc});
+			nexrad.addTo(map);
+			war.addOverlay(nexrad, 'wms');
+			kontrola.push(nexrad);
+			}}	
 
+$("#wyslij").click(function(){
+	wysylanie();
+	});
+
+$("#warstwy").keypress(function(event){var keycode = (event.witch ? event.witch : event.which);
+	if(keycode == '13'){
+		wysylanie();
+		}});
+		
 function klik2(e){
 	this.getLatLng();
 	if(flagi[3]===true){
@@ -73,34 +100,38 @@ function klik2(e){
 	 	var to=this.bindPopup(tekst).openPopup();
 		adno.addLayer(to);
 	 	flagi[3]=false;
-	 	}	
-}
+	 	}}
+
+function wiadomosc(typ){
+	var wyn=true;
+	console.log(typ.length);
+	$.each(typ, function(key, object){
+		console.log($(this).val());
+        if ($(this).val()==false ){
+        	$(this).addClass("error");
+            wyn=false;}
+        else{$(this).removeClass("error");};
+		});
+	return wyn;}
 
 var marki=L.layerGroup();
 var adno=L.layerGroup();
-var baseMaps = {
-    "OpenStreetMap":osm};
+var baseMaps = {"OpenStreetMap":osm};
 var overlayMaps = {};
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+var war=L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 function klikniecie(e){
 	 //alert("You clicked the map at " + e.latlng);
 	 if(flagi[0]===true){
 	 	marki.addLayer(L.marker(e.latlng).on('click', klik2));
-	 	marki.addTo(map);
-	 	}
+	 	marki.addTo(map);}
 	 	
 	 if(flagi[2]===true){
 	 	var tekst=prompt("Podaj tekst adnotacji");
 	 	var pop=L.marker(e.latlng).bindPopup(tekst);
 	 	adno.addLayer(pop);
 	 	adno.addTo(map);
-	 	pop.openPopup();
-	 	}	
-	 }
-	 
+	 	pop.openPopup();}}
+	 	 
 map.on('click', klikniecie);
-
-
-	
 

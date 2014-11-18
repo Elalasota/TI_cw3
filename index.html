@@ -20,7 +20,18 @@
 	<div class="przycisk">Dodaj adnotację do elementu</div>
 	<div class="przycisk">Usuń adnotacje</div>
 	<div class="przycisk">Dodaj WMS</div>
-		<div><form><p>Adres</p><input type="text" name="wms" id="wms"><p>Warstwy</p><input type="text" name="warstwy" id="wms"></form></div>
+		<div id="formularz"><form><p>Adres</p><input type="url" name="wms" id="wms">
+			<p>Warstwy</p><input type="text" name="warstwy" id="warstwy">
+			<div id="opcje">
+				<p id="op">Opcje dodatkowe</p>
+			<p>Przezroczytość</p>
+			<input type="radio" name="przezroczystosc" id="przezroczystosc" value="nie">Nie
+			<input type="radio" name="przezroczystosc" id="przezroczystosc" value="tak">Tak
+			<p>Format</p><input type="text" name="format" id="format">
+			</div>
+			</form>
+			<div id="wyslij">Wyślij</div>
+		</div>
 		
 	<div class="przycisk">Usuń warstwy WMS</div>
 	<div class="przycisk">Przywróć zasięg</div>
