@@ -1,231 +1,9 @@
-var Opsm="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-var map = new L.Map('map');
-var osm = new L.TileLayer(Opsm, {maxZoom: 50, attribution: osmAttrib});
-var widok=new L.LatLng(51.11, 17.04);
-var zum=12;
-map.setView(widok,zum);
-map.addLayer(osm);
-$("#formularz").hide();
-$("#form2").hide();
-$("#tresc").hide();
-var kontrola=[];
-var flagi=[];
-for(i=0;i<$('.przycisk').size();i++ ){
-	flagi.push(false);}
-	
-var dlugosc=flagi.length;
-function reset(){
-	for(var i=0; i<dlugosc; i++){
-			flagi[i]=false;
-			}}
-
-$(".przycisk").click(function(){
-reset();		
-	var wartosc=$(this).html();
-	console.log(wartosc);
-	if (wartosc==="Dodaj marker"){
-	function reset(){
-	for(var i=0; i<dlugosc; i++){
-			console.log(flagi[i]);}
-			}
-		flagi[0]=true;
-	}
-	else if (wartosc==="Usuń markery"){
-		console.log("usun");
-		flagi[1]=true;
-	 	marki.clearLayers();
-	 	adno.clearLayers();
-	}
-	else if (wartosc==="Dodaj adnotację"){
-		flagi[2]=true;
-	}
-	else if (wartosc==="Dodaj adnotację do elementu"){
-		flagi[3]=true;
-	}
-	else if (wartosc==="Usuń adnotacje"){
-		flagi[4]=true;
-		adno.clearLayers();
-	}
-		else if (wartosc==="Dodaj WMS"){
-		flagi[5]=true;
-		$("#formularz").toggle();
-		
-	}
-	else if (wartosc==="Usuń warstwy WMS"){
-		flagi[6]=true;
-		for(i=0;i<kontrola.length;i++){
-			console.log(kontrola[i]);
-			map.removeLayer(kontrola[i]);
-			war.removeLayer(kontrola[i]);}}
-		else if (wartosc==="Przywróć zasięg"){
-		flagi[7]=true;
-		map.setView(widok,zum);}
-		else if (wartosc==="Wirtualna wycieczka"){
-		flagi[8]=true;
-		$("#form2").toggle();
-		}
-		else if (wartosc==="Usuń wycieczkę"){
-		flagi[9]=true;
-		$("#tresc").hide();
-		$("#map").height("750px");
-		if(myLayer){map.removeLayer(myLayer);}
-		
-		}
-		});
-
-var mar_czer=L.icon({iconUrl:'marker.png', iconSize:[24, 32], iconAnchor:[12, 32], popupAnchor:  [0, -20]});
-var zoo=L.icon({iconUrl:'zoo.png', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor:  [0, -20]});
-var fontanna=L.icon({iconUrl:'fontanna.jpg', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor:  [0, -20]});
-var japonski=L.icon({iconUrl:'japonski.png', iconSize:[100, 32], iconAnchor:[50, 32], popupAnchor:  [0, -20]});
-var hala=L.icon({iconUrl:'hala.png', iconSize:[100, 80], iconAnchor:[50, 80], popupAnchor:  [0, -50]});
-var botaniczny=L.icon({iconUrl:'botaniczny.jpg', iconSize:[26, 36], iconAnchor:[13, 36], popupAnchor:  [0, -16]});
-var panorama=L.icon({iconUrl:'panorama.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -26]});
-var ratusz=L.icon({iconUrl:'ratusz.png', iconSize:[80, 70], iconAnchor:[40, 70], popupAnchor:  [0, -46]});
-var opera=L.icon({iconUrl:'opera.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -20]});
-var dworzec=L.icon({iconUrl:'dworzec.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -20]});
-var katedra=L.icon({iconUrl:'katedra.gif', iconSize:[40, 80], iconAnchor:[20,80], popupAnchor:  [0, -46]});
-var time=0;	
-function onEachFeature(feature, layer) {
-    if (feature.properties && feature.properties.popupContent) {
-        layer.bindPopup(feature.properties.popupContent);
-    }
-}
-var ikona=mar_czer;
-
-
-
-
-$("#czas").keypress(function(event){var keycode = (event.witch ? event.witch : event.which);
-	if(keycode == '13'){
-
-		if (wiadomosc($("#czas"))==true){time=$("#czas").val();}
-		if(time<30){
-			console.log("zle");
-			myLayer.addTo(map);
-			//myLayer.addData(element);
-			//myLayer.setStyle(mojstyl);
-		}
-		else{console.log("ok");}
-		}});	
-$dworzec=$("<h2>Dworzec kolejowy we Wrocławiu</h2><p>Największa z osobowych stacji kolejowych Wrocławia.Jeden z nielicznych w Polsce, który ma halę peronową. Położony na liniach kolejowych prowadzących z południowego wschodu (Opole oraz Lubliniec) i południa (Świdnica oraz Kłodzko) na zachód (Jelenia Góra oraz Legnica), na północ przez stację Wrocław Mikołajów (Poznań) i północny zachód (Głogów, Zielona Góra), a przez stację Wrocław Nadodrze – na północny wschód (Oleśnica, Łódź).</p><p>Neogotycki kolejowy Dworzec Główny we Wrocławiu i jego okolice to jedno z najładniejszych miejsc w stolicy Dolnego Śląska w kategorii: obiekty użyteczności publicznej. Dworzec, perony i plac przed monumentalnym gmachem przeszły remont przed mistrzostwami Europy w piłce nożnej w 2012 roku, których część odbyła się we Wrocławiu.</p>");
-function klik3(e){
-	this.getLatLng();
-	console.log(this.toGeoJSON());
-	var warto=this.toGeoJSON();
-	var oko=warto.properties.warstwa;
-	console.log(oko);
-	$("#map").height("500px");
-	if(oko=="dworzec"){
-	$("#tresc").show();
-	$("#tresc").append($dworzec);}
-	
-	}
-		
-		
-var przezroczystosc=false;
-var forma='image/jpeg';
-var wart="";
-var style="";
-var wersja='1.1.1';
-var ukl=null;
-
-function wysylanie(){
-	if($( "input[type='radio']:checked" )){wart=$( "input[type='radio']:checked" ).val();}
-	if (wart=="tak"){
-		console.log("Tak");
-		przezroczytosc=true;}
-	else{przezroczytosc=false; console.log("Nie");}
-	if (wiadomosc2($("#style"))==true){style=$("#style").val();}
-	if (wiadomosc2($("#format"))==true){forma=$("#format").val();}
-	if (wiadomosc2($("#wersja"))==true){wersja=$("#wersja").val();}
-	if (wiadomosc2($("#crs"))==true){ukl=$("#crs").val();}
-	var spr=wiadomosc($("#wms"));
-	var spr1=wiadomosc($("#warstwy"));
-	if (spr==true&&spr1==true){
-			var adres=$("#wms").val();
-			var warstwy=$("#warstwy").val();
-			var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczytosc, styles:style, version:wersja, crs:ukl});
-			nexrad.addTo(map);
-			war.addOverlay(nexrad, 'wms');
-			kontrola.push(nexrad);
-			}}	
-
-$("#wyslij").click(function(){
-	wysylanie();
-	});
-
-$("#warstwy").keypress(function(event){var keycode = (event.witch ? event.witch : event.which);
-	if(keycode == '13'){
-		wysylanie();
-		}});
-		
-function klik2(e){
-	this.getLatLng();
-	if(flagi[3]===true){
-	 	var tekst=prompt("Podaj tekst adnotacji");
-	 	var to=this.bindPopup(tekst).openPopup();
-		adno.addLayer(to);
-	 	flagi[3]=false;
-	 	}}
-
-function wiadomosc(typ){
-	var wyn=true;
-	console.log(typ.length);
-	$.each(typ, function(key, object){
-		console.log($(this).val());
-        if ($(this).val()==false ){
-        	$(this).addClass("error");
-            wyn=false;}
-        else{$(this).removeClass("error");};
-		});
-	return wyn;}
-
-function wiadomosc2(typ){
-	var wyn=true;
-	console.log(typ.length);
-	$.each(typ, function(key, object){
-		console.log($(this).val());
-        if ($(this).val()==false ){
-            wyn=false;}
-		});
-	return wyn;}
-
-
-
-var marki=L.layerGroup();
-var adno=L.layerGroup();
-var baseMaps = {"OpenStreetMap":osm};
-var overlayMaps = {};
-var war=L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-function klikniecie(e){
-	 //alert("You clicked the map at " + e.latlng);
-	 if(flagi[0]===true){
-	 	marki.addLayer(L.marker(e.latlng).on('click', klik2));
-	 	marki.addTo(map);}
-	 	
-	 if(flagi[2]===true){
-	 	var tekst=prompt("Podaj tekst adnotacji");
-	 	var pop=L.marker(e.latlng).bindPopup(tekst);
-	 	adno.addLayer(pop);
-	 	adno.addTo(map);
-	 	pop.openPopup();}}
-	 	 
-map.on('click', klikniecie);
-var mojstyl = {
-    "color": "#CE1A05",
-    "weight": 4,
-    "opacity": 0.65
-};
-
-
-var element= {
+{
   "type": "FeatureCollection",
   "features": [
     {
       "type": "Feature",
-      "properties": {"popupContent": "Hala Stulecia", "warstwa":"hala"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -236,7 +14,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Rotunda - Panorama Racławicka", "warstwa":"panorama"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -247,7 +25,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Ogród Botaniczny", "warstwa":"botaniczny"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -258,7 +36,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Wrocławski Rynek", "warstwa":"ratusz"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -269,7 +47,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Opera wrocławska", "warstwa":"opera"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -280,7 +58,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Dworzec Kolejowy", "warstwa":"dworzec"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -291,7 +69,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "ZOO", "warstwa":"zoo"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -302,12 +80,12 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Ostrów Tumski", "warstwa":"katedra"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
-          17.046586275100708,
-          51.11418506581072
+          17.04807758331299,
+          51.11448815085606
         ]
       }
     },
@@ -616,7 +394,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Wrocławska Fontanna Multimedialna", "warstwa":"fontanna"},
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -627,7 +405,7 @@ var element= {
     },
     {
       "type": "Feature",
-      "properties": {"popupContent": "Ogród Japoński","warstwa":"japonski" },
+      "properties": {},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -831,19 +609,10 @@ var element= {
       }
     }
   ]
-};
-var myLayer = L.geoJson(element, {style:mojstyl, onEachFeature: onEachFeature, pointToLayer: function (feature, latlng) {
-				switch(feature.properties.warstwa){
-					case "zoo":  return L.marker(latlng, {icon:zoo}).on('click', klik3);
-					case "fontanna": return L.marker(latlng, {icon:fontanna}).on('click', klik3);
-					case "japonski": return L.marker(latlng, {icon:japonski}).on('click', klik3);
-					case "hala": return L.marker(latlng, {icon:hala}).on('click', klik3);
-					case "botaniczny": return L.marker(latlng, {icon:botaniczny}).on('click', klik3);
-					case "katedra":return L.marker(latlng, {icon:katedra}).on('click', klik3);
-					case "panorama":return L.marker(latlng, {icon:panorama}).on('click', klik3);
-					case "ratusz":return L.marker(latlng, {icon:ratusz}).on('click', klik3);
-					case "opera":return L.marker(latlng, {icon:opera}).on('click', klik3);
-					case "dworzec":return L.marker(latlng, {icon:dworzec}).on('click', klik3);
-					default: return L.marker(latlng, {icon:mar_czer}).on('click', klik3);
-				}
-				}});
+}
+case "zoo": ikona=zoo;
+					case "fontanna": ikona=fontanna;
+					case "japonski": ikona=japonski;
+					case "hala": ikona=hala;
+					case "botaniczny": ikona=botaniczny;
+					case "katdera":ikona=katedra;
