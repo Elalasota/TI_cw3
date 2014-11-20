@@ -9,6 +9,8 @@ map.addLayer(osm);
 $("#formularz").hide();
 $("#form2").hide();
 $("#tresc").hide();
+$("#nastepny").hide();
+
 var kontrola=[];
 var flagi=[];
 for(i=0;i<$('.przycisk').size();i++ ){
@@ -74,19 +76,24 @@ reset();
 		}
 		});
 
-var mar_czer=L.icon({iconUrl:'marker.png', iconSize:[24, 32], iconAnchor:[12, 32], popupAnchor:  [0, -20]});
-var zoo=L.icon({iconUrl:'zoo.png', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor:  [0, -20]});
-var fontanna=L.icon({iconUrl:'fontanna.jpg', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor:  [0, -20]});
-var japonski=L.icon({iconUrl:'japonski.png', iconSize:[100, 32], iconAnchor:[50, 32], popupAnchor:  [0, -20]});
-var hala=L.icon({iconUrl:'hala.png', iconSize:[100, 80], iconAnchor:[50, 80], popupAnchor:  [0, -50]});
-var botaniczny=L.icon({iconUrl:'botaniczny.jpg', iconSize:[26, 36], iconAnchor:[13, 36], popupAnchor:  [0, -16]});
-var panorama=L.icon({iconUrl:'panorama.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -26]});
-var ratusz=L.icon({iconUrl:'ratusz.png', iconSize:[80, 70], iconAnchor:[40, 70], popupAnchor:  [0, -46]});
-var opera=L.icon({iconUrl:'opera.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -20]});
-var dworzec=L.icon({iconUrl:'dworzec.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -20]});
-var katedra=L.icon({iconUrl:'katedra.gif', iconSize:[40, 80], iconAnchor:[20,80], popupAnchor:  [0, -46]});
+var mar_czer=L.icon({iconUrl:'obrazy/marker.png', iconSize:[24, 32], iconAnchor:[12, 32], popupAnchor:  [0, -20]});
+var zoo=L.icon({iconUrl:'obrazy/zoo.png', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor:  [0, -20]});
+var fontanna=L.icon({iconUrl:'obrazy/fontanna.jpg', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor:  [0, -20]});
+var japonski=L.icon({iconUrl:'obrazy/japonski.png', iconSize:[100, 32], iconAnchor:[50, 32], popupAnchor:  [0, -20]});
+var hala=L.icon({iconUrl:'obrazy/hala.png', iconSize:[100, 80], iconAnchor:[50, 80], popupAnchor:  [0, -50]});
+var botaniczny=L.icon({iconUrl:'obrazy/botaniczny.jpg', iconSize:[26, 36], iconAnchor:[13, 36], popupAnchor:  [0, -16]});
+var panorama=L.icon({iconUrl:'obrazy/panorama.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -26]});
+var ratusz=L.icon({iconUrl:'obrazy/ratusz.png', iconSize:[80, 70], iconAnchor:[40, 70], popupAnchor:  [0, -46]});
+var opera=L.icon({iconUrl:'obrazy/opera.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -20]});
+var dworzec=L.icon({iconUrl:'obrazy/dworzec.jpg', iconSize:[40, 28], iconAnchor:[20, 28], popupAnchor:  [0, -20]});
+var katedra=L.icon({iconUrl:'obrazy/katedra.gif', iconSize:[40, 80], iconAnchor:[20,80], popupAnchor:  [0, -46]});
 var time=0;	
+var obiekty={};
+var tablica=[];
 function onEachFeature(feature, layer) {
+	if (feature.properties && feature.properties.warstwa){
+		obiekty[feature.properties.warstwa]=feature.geometry.coordinates;
+		tablica.push([feature.properties.warstwa, feature.geometry.coordinates]);}
     if (feature.properties && feature.properties.popupContent) {
         layer.bindPopup(feature.properties.popupContent);
     }
@@ -94,8 +101,7 @@ function onEachFeature(feature, layer) {
 var ikona=mar_czer;
 
 
-
-
+var okno="";
 $("#czas").keypress(function(event){var keycode = (event.witch ? event.witch : event.which);
 	if(keycode == '13'){
 
@@ -103,26 +109,53 @@ $("#czas").keypress(function(event){var keycode = (event.witch ? event.witch : e
 		if(time<30){
 			console.log("zle");
 			myLayer.addTo(map);
-			//myLayer.addData(element);
-			//myLayer.setStyle(mojstyl);
-		}
+			$("#map").height("500px");
+			$("#tresc").show();
+			$("#tresc").load("start.html");
+			$("#wycieczka").append("<div id='start'>Start</div>");	
+			$("#start").click(function(){
+			console.log("klik");
+			okno="dworzec";
+			$('#tresc').attr('href', okno);
+			$("#tresc").load(okno+".html");
+			$("#start").remove();
+			$("#nastepny").show();
+			console.log(obiekty[okno][0]);
+			map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 15);
+				});	}
 		else{console.log("ok");}
 		}});	
-$dworzec=$("<h2>Dworzec kolejowy we Wrocławiu</h2><p>Największa z osobowych stacji kolejowych Wrocławia.Jeden z nielicznych w Polsce, który ma halę peronową. Położony na liniach kolejowych prowadzących z południowego wschodu (Opole oraz Lubliniec) i południa (Świdnica oraz Kłodzko) na zachód (Jelenia Góra oraz Legnica), na północ przez stację Wrocław Mikołajów (Poznań) i północny zachód (Głogów, Zielona Góra), a przez stację Wrocław Nadodrze – na północny wschód (Oleśnica, Łódź).</p><p>Neogotycki kolejowy Dworzec Główny we Wrocławiu i jego okolice to jedno z najładniejszych miejsc w stolicy Dolnego Śląska w kategorii: obiekty użyteczności publicznej. Dworzec, perony i plac przed monumentalnym gmachem przeszły remont przed mistrzostwami Europy w piłce nożnej w 2012 roku, których część odbyła się we Wrocławiu.</p>");
+var strony=["dworzec", "opera", "ratusz", "panorama", "katedra", "botaniczny", "hala", "fontanna", "japonski", "zoo"];
+var biezace;
+var next;
+console.log(strony.length);
+$("#nastepny").click(function(){
+	biezace= jQuery.inArray($('#tresc').attr('href'), strony);
+	if(biezace==strony.length-1)
+	{$("#nastepny").hide();}
+	console.log(biezace);
+	next=biezace+1;
+	okno=strony[next];
+	$("#tresc").load(okno+".html");
+	map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 15);
+	$('#tresc').attr('href', okno);
+	
+	
+});
+		
+		
 function klik3(e){
-	this.getLatLng();
+	var zasieg=this.getLatLng();
 	console.log(this.toGeoJSON());
 	var warto=this.toGeoJSON();
 	var oko=warto.properties.warstwa;
+	$('#tresc').attr('href', oko);
 	console.log(oko);
 	$("#map").height("500px");
-	if(oko=="dworzec"){
-	$("#tresc").show();
-	$("#tresc").append($dworzec);}
+	map.setView(zasieg,15);
+	$("#tresc").load(oko+".html");
+}
 	
-	}
-		
-		
 var przezroczystosc=false;
 var forma='image/jpeg';
 var wart="";

@@ -108,4 +108,25 @@ input{
 #tresc{
 	background-color:#B4D09D;
 }
-
+img{
+	height: 200px;
+	width: 350px;
+}
+#start{
+	margin:0 auto;
+	padding-top:7px;
+	padding-bottom:7px;
+	height: 20px;
+	width:120px;
+	border-radius:5px;
+	background-color:#D9EAB3;
+}
+#nastepny>img{
+	height: 30px;
+	width: 60px;
+}
+#nastepny{
+	margin:0 auto;
+	height:40px;
+	width:80px;
+}
