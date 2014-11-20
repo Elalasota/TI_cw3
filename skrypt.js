@@ -9,8 +9,8 @@ map.addLayer(osm);
 $("#formularz").hide();
 $("#form2").hide();
 $("#tresc").hide();
-$("#nastepny").hide();
-$("#poprzedni").hide();
+$("#strzalka_przod").hide();
+$("#strzalka_tyl").hide();
 var kontrola=[];
 var flagi=[];
 for(i=0;i<$('.przycisk').size();i++ ){
@@ -105,17 +105,19 @@ $("#map").height("500px");
 $("#tresc").show();
 $("#tresc").load("start.html");
 $("#wycieczka").append("<div id='start'>Start</div>");
+
 $("#start").click(function(){
 console.log("klik");
+$("#strzalka_przod").show();
 okno="dworzec";
 $('#tresc').attr('href', okno);
 $("#tresc").load(okno+".html");
 $("#start").remove();
-$("#nastepny").show();
-$("#poprzedni").show();
+
 console.log(obiekty[okno][0]);
 map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 16);
-}); }
+}); 
+}
 else{console.log("ok");}
 }});
 var strony=["dworzec", "opera", "ratusz", "panorama", "katedra", "botaniczny", "hala", "fontanna", "japonski", "zoo"];
@@ -123,29 +125,48 @@ var biezace;
 var next;
 console.log(strony.length);
 
-
-$("#nastepny").click(function(){
+$("#strzalka_przod").click(function(){
 biezace= jQuery.inArray($('#tresc').attr('href'), strony);
+$("#strzalka_tyl").show();
 if(biezace==strony.length-1)
-{$("#nastepny").hide();}
+{$("#strzalka_przod").hide();}else{$("#strzalka_przod").show();}
 console.log(biezace);
 next=biezace+1;
-if(next==strony.length-1){$("#nastepny").hide();}
+if(next==strony.length-1){$("#strzalka_przod").hide();}
 okno=strony[next];
 $("#tresc").load(okno+".html");
 map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 16);
 $('#tresc').attr('href', okno);
 });
+
+
+$("#strzalka_tyl").click(function(){
+biezace= jQuery.inArray($('#tresc').attr('href'), strony);
+if(biezace>0){$("#strzalka_tyl").show();}else{$("#strzalka_tyl").hide();}
+if(biezace==strony.length-1)
+$("#strzalka_przod").show();
+console.log(biezace);
+back=biezace-1;
+if(back==0){$("#strzalka_tyl").hide();}
+okno=strony[back];
+$("#tresc").load(okno+".html");
+map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 16);
+$('#tresc').attr('href', okno);
+});
+
+
 function klik3(e){
 $("#start").hide();
-$("#nastepny").show();
+$("#strzalka_przod").show();
+$("#strzalka_tyl").show();
 var zasieg=this.getLatLng();
 console.log(this.toGeoJSON());
 var warto=this.toGeoJSON();
 var oko=warto.properties.warstwa;
 $('#tresc').attr('href', oko);
 biezace= jQuery.inArray($('#tresc').attr('href'), strony);
-if(biezace==strony.length-1){$("#nastepny").hide();}
+if(biezace==0){$("#strzalka_tyl").hide();}
+if(biezace==strony.length-1){$("#strzalka_przod").hide();}
 console.log(oko);
 $("#map").height("500px");
 map.setView(zasieg,16);
