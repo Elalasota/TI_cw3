@@ -4,22 +4,31 @@ var map = new L.Map('map');
 var osm = new L.TileLayer(Opsm, {maxZoom: 50, attribution: osmAttrib});
 var widok=new L.LatLng(51.11, 17.04);
 var zum=12;
+var popy={};
 map.setView(widok,zum);
 map.addLayer(osm);
 $("#formularz").hide();
+$("#formularz2").hide();
 $("#form2").hide();
 $("#tresc").hide();
+
 $("#strzalka_przod").hide();
 $("#strzalka_tyl").hide();
 var kontrola=[];
 var flagi=[];
+var przezroczystosc=false;
+var forma='image/jpeg';
+var wart="";
+var style="";
+var wersja='1.1.1';
+var ukl=null;
 for(i=0;i<$('.przycisk').size();i++ ){
-flagi.push(false);}
+	flagi.push(false);}
 var dlugosc=flagi.length;
 function reset(){
 for(var i=0; i<dlugosc; i++){
-flagi[i]=false;
-}}
+	flagi[i]=false;
+	}}
 $(".przycisk").click(function(){
 reset();
 var wartosc=$(this).html();
@@ -32,44 +41,60 @@ console.log(flagi[i]);}
 flagi[0]=true;
 }
 else if (wartosc==="Usuń markery"){
-console.log("usun");
-flagi[1]=true;
-marki.clearLayers();
-adno.clearLayers();
-}
+	console.log("usun");
+	flagi[1]=true;
+	marki.clearLayers();
+	//adno.clearLayers();
+	}
 else if (wartosc==="Dodaj adnotację"){
-flagi[2]=true;
-}
+	flagi[2]=true;
+	}
 else if (wartosc==="Dodaj adnotację do elementu"){
-flagi[3]=true;
-}
+	flagi[3]=true;
+	}
 else if (wartosc==="Usuń adnotacje"){
-flagi[4]=true;
-adno.clearLayers();
-}
-else if (wartosc==="Dodaj WMS"){
-flagi[5]=true;
-$("#formularz").toggle();
+	flagi[4]=true;
+	adno.clearLayers();
+	}
+else if (wartosc==="Dodaj WMS - adres i warstwy"){
+	flagi[5]=true;
+	$("#formularz").toggle();
+	}
+else if(wartosc==="Dodaj WMS - adres"){
+	flagi[10]=true;
+	$("#formularz2").toggle();
 }
 else if (wartosc==="Usuń warstwy WMS"){
-flagi[6]=true;
-for(i=0;i<kontrola.length;i++){
-console.log(kontrola[i]);
-map.removeLayer(kontrola[i]);
-war.removeLayer(kontrola[i]);}}
+	flagi[6]=true;
+	for(i=0;i<kontrola.length;i++){
+		console.log(kontrola[i]);
+		map.removeLayer(kontrola[i]);
+		war.removeLayer(kontrola[i]);}}
 else if (wartosc==="Przywróć zasięg"){
-flagi[7]=true;
-map.setView(widok,zum);}
+	flagi[7]=true;
+	map.setView(widok,zum);}
+else if (wartosc==="Rysuj koło"){
+	flagi[11]=true;
+	}
+else if (wartosc==="Usuń koła"){
+	flagi[12]=true;
+	kola.clearLayers();
+	}
+//else if (wartosc==="Usuń marker"){
+	//flagi[13]=true;
+	//}
 else if (wartosc==="Wirtualna wycieczka"){
-flagi[8]=true;
-$("#form2").toggle();
-}
+	flagi[8]=true;
+	$("#form2").toggle();
+	}
 else if (wartosc==="Usuń wycieczkę"){
-flagi[9]=true;
-$("#tresc").hide();
-$("#map").height("750px");
-if(myLayer){map.removeLayer(myLayer);}
-}
+	flagi[9]=true;
+	$("#tresc").hide();
+	$("#strzalka_przod").hide();
+	$("#strzalka_tyl").hide();
+	$("#map").height("750px");
+	if(myLayer){map.removeLayer(myLayer);}
+	}
 });
 var mar_czer=L.icon({iconUrl:'obrazy/marker.png', iconSize:[24, 32], iconAnchor:[12, 32], popupAnchor: [0, -20]});
 var zoo=L.icon({iconUrl:'obrazy/zoo.png', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor: [0, -20]});
@@ -86,19 +111,22 @@ var time=0;
 var obiekty={};
 var tablica=[];
 function onEachFeature(feature, layer) {
-if (feature.properties && feature.properties.warstwa){
-obiekty[feature.properties.warstwa]=feature.geometry.coordinates;
-tablica.push([feature.properties.warstwa, feature.geometry.coordinates]);}
-if (feature.properties && feature.properties.popupContent) {
-layer.bindPopup(feature.properties.popupContent);
+	if (feature.properties && feature.properties.warstwa){
+	obiekty[feature.properties.warstwa]=feature.geometry.coordinates;
+	tablica.push([feature.properties.warstwa, feature.geometry.coordinates]);}
+	if (feature.properties && feature.properties.popupContent) {
+	layer.bindPopup(feature.properties.popupContent);
+	//console.log(layer.bindPopup(feature.properties.popupContent));
+	popy[feature.properties.warstwa]=layer.bindPopup(feature.properties.popupContent);
+			}
 }
-}
+
 var ikona=mar_czer;
 var okno="";
 $("#czas").keypress(function(event){var keycode = (event.witch ? event.witch : event.which);
 if(keycode == '13'){
 if (wiadomosc($("#czas"))==true){time=$("#czas").val();}
-if(time<30){
+if(time>0){
 console.log("zle");
 myLayer.addTo(map);
 $("#map").height("500px");
@@ -113,8 +141,10 @@ okno="dworzec";
 $('#tresc').attr('href', okno);
 $("#tresc").load(okno+".html");
 $("#start").remove();
-
 console.log(obiekty[okno][0]);
+var popek=popy[okno];
+console.log(popek);
+popek.openPopup();
 map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 16);
 }); 
 }
@@ -134,6 +164,9 @@ console.log(biezace);
 next=biezace+1;
 if(next==strony.length-1){$("#strzalka_przod").hide();}
 okno=strony[next];
+var popek=popy[okno];
+console.log(popek);
+popek.openPopup();
 $("#tresc").load(okno+".html");
 map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 16);
 $('#tresc').attr('href', okno);
@@ -149,6 +182,9 @@ console.log(biezace);
 back=biezace-1;
 if(back==0){$("#strzalka_tyl").hide();}
 okno=strony[back];
+var popek=popy[okno];
+console.log(popek);
+popek.openPopup();
 $("#tresc").load(okno+".html");
 map.setView(new L.LatLng(obiekty[okno][1],obiekty[okno][0]), 16);
 $('#tresc').attr('href', okno);
@@ -156,99 +192,175 @@ $('#tresc').attr('href', okno);
 
 
 function klik3(e){
-$("#start").hide();
-$("#strzalka_przod").show();
-$("#strzalka_tyl").show();
-var zasieg=this.getLatLng();
-console.log(this.toGeoJSON());
-var warto=this.toGeoJSON();
-var oko=warto.properties.warstwa;
-$('#tresc').attr('href', oko);
-biezace= jQuery.inArray($('#tresc').attr('href'), strony);
-if(biezace==0){$("#strzalka_tyl").hide();}
-if(biezace==strony.length-1){$("#strzalka_przod").hide();}
-console.log(oko);
-$("#map").height("500px");
-map.setView(zasieg,16);
-$("#tresc").load(oko+".html");
+	$("#start").hide();
+	$("#strzalka_przod").show();
+	$("#strzalka_tyl").show();
+	var zasieg=this.getLatLng();
+	console.log(this.toGeoJSON());
+	var warto=this.toGeoJSON();
+	var oko=warto.properties.warstwa;
+	$('#tresc').attr('href', oko);
+	biezace= jQuery.inArray($('#tresc').attr('href'), strony);
+	if(biezace==0){$("#strzalka_tyl").hide();}
+	if(biezace==strony.length-1){$("#strzalka_przod").hide();}
+	console.log(oko);
+	$("#map").height("500px");
+	map.setView(zasieg,16);
+	$("#tresc").load(oko+".html");
 }
-var przezroczystosc=false;
-var forma='image/jpeg';
-var wart="";
-var style="";
-var wersja='1.1.1';
-var ukl=null;
+
+function wyswms(wms){
+	var id=wms.indexOf('?');
+	adres=wms.slice(0,id);
+	var tab=wms.split('?');
+	var parametry=tab[1].split('%');
+	for(i=0;i<parametry.length;i++){
+		var id1=parametry[i].toLowerCase().indexOf('layer=');
+		var id2=parametry[i].toLowerCase().indexOf('version=');
+		var id3=parametry[i].toLowerCase().indexOf('format=');
+		var id4=parametry[i].toLowerCase().indexOf('srs=');
+		var id5=parametry[i].toLowerCase().indexOf('transparent=');
+		var id6=parametry[i].toLowerCase().indexOf('styles=');
+		console.log(id3);
+		if(id1!=-1){
+			warstwy=parametry[i].substring(id1+6);
+			console.log(warstwy);
+		}
+		if(id2!=-1){
+			wersja=parametry[i].substring(id2+8);
+			console.log(wersja);
+		}
+		if(id3!=-1){
+			forma=parametry[i].substring(id3+7);
+			console.log(forma);
+		}
+		if(id4!=-1){
+			ukl=parametry[i].substring(id4+4);
+			console.log(ukl);
+		}
+		console.log(id5);
+		if(id5!=-1){
+			console.log(parametry[i].substring(id5+12).toLowerCase());
+			if(parametry[i].substring(id5+12).toLowerCase()=='true'){
+				przezroczystosc=true;
+			}
+			else{przezroczystosc=false;}
+			console.log(przezroczystosc);
+		}
+		if(id6!=-1){
+			style=parametry[i].substring(id6+7);
+			console.log(style);
+		}
+	}
+	var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczystosc, styles:style, version:wersja, crs:ukl});
+	nexrad.addTo(map);
+	war.addOverlay(nexrad, 'wms');
+	kontrola.push(nexrad);
+}
+
+	
+	
+$("#wyslij2").click(function(){
+	if (wiadomosc($("#wms2"))==true){adr=$("#wms2").val();
+	wyswms(adr);
+}});
+
+
 function wysylanie(){
-if($( "input[type='radio']:checked" )){wart=$( "input[type='radio']:checked" ).val();}
-if (wart=="tak"){
-console.log("Tak");
-przezroczytosc=true;}
-else{przezroczytosc=false; console.log("Nie");}
-if (wiadomosc2($("#style"))==true){style=$("#style").val();}
-if (wiadomosc2($("#format"))==true){forma=$("#format").val();}
-if (wiadomosc2($("#wersja"))==true){wersja=$("#wersja").val();}
-if (wiadomosc2($("#crs"))==true){ukl=$("#crs").val();}
-var spr=wiadomosc($("#wms"));
-var spr1=wiadomosc($("#warstwy"));
-if (spr==true&&spr1==true){
-var adres=$("#wms").val();
-var warstwy=$("#warstwy").val();
-var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczytosc, styles:style, version:wersja, crs:ukl});
-nexrad.addTo(map);
-war.addOverlay(nexrad, 'wms');
-kontrola.push(nexrad);
+	if($( "input[type='radio']:checked" )){wart=$( "input[type='radio']:checked" ).val();}
+	if (wart=="tak"){
+		console.log("Tak");
+		przezroczystosc=true;}
+	else{przezroczystosc=false; console.log("Nie");}
+	if (wiadomosc2($("#style"))==true){style=$("#style").val();}
+	if (wiadomosc2($("#format"))==true){forma=$("#format").val();}
+	if (wiadomosc2($("#wersja"))==true){wersja=$("#wersja").val();}
+	if (wiadomosc2($("#crs"))==true){ukl=$("#crs").val();}
+	var spr=wiadomosc($("#wms"));
+	var spr1=wiadomosc($("#warstwy"));
+	if (spr==true&&spr1==true){
+	var adres=$("#wms").val();
+	var warstwy=$("#warstwy").val();
+	var nexrad=L.tileLayer.wms(adres, {layers: warstwy, format: forma, transparent:przezroczystosc, styles:style, version:wersja, crs:ukl});
+	nexrad.addTo(map);
+	war.addOverlay(nexrad, 'wms');
+	kontrola.push(nexrad);
 }}
 $("#wyslij").click(function(){
-wysylanie();
+	wysylanie();
 });
 $("#warstwy").keypress(function(event){var keycode = (event.witch ? event.witch : event.which);
 if(keycode == '13'){
 wysylanie();
 }});
 function klik2(e){
-this.getLatLng();
-if(flagi[3]===true){
-var tekst=prompt("Podaj tekst adnotacji");
-var to=this.bindPopup(tekst).openPopup();
-adno.addLayer(to);
-flagi[3]=false;
+	this.getLatLng();
+	if(flagi[3]===true){
+		var tekst=prompt("Podaj tekst adnotacji");
+		var to=this.bindPopup(tekst).openPopup();
+	adno.addLayer(to);
+	flagi[3]=false;
 }}
 function wiadomosc(typ){
-var wyn=true;
-console.log(typ.length);
-$.each(typ, function(key, object){
-console.log($(this).val());
-if ($(this).val()==false ){
-$(this).addClass("error");
-wyn=false;}
-else{$(this).removeClass("error");};
-});
-return wyn;}
+	var wyn=true;
+	console.log(typ.length);
+	$.each(typ, function(key, object){
+	console.log($(this).val());
+	if ($(this).val()==false ){
+	$(this).addClass("error");
+	wyn=false;}
+	else{$(this).removeClass("error");};
+	});
+	return wyn;}
 function wiadomosc2(typ){
-var wyn=true;
-console.log(typ.length);
-$.each(typ, function(key, object){
-console.log($(this).val());
-if ($(this).val()==false ){
-wyn=false;}
-});
-return wyn;}
+	var wyn=true;
+	console.log(typ.length);
+	$.each(typ, function(key, object){
+	console.log($(this).val());
+	if ($(this).val()==false ){
+	wyn=false;}
+	});
+	return wyn;}
 var marki=L.layerGroup();
 var adno=L.layerGroup();
+var kola=L.layerGroup();
 var baseMaps = {"OpenStreetMap":osm};
 var overlayMaps = {};
 var war=L.control.layers(baseMaps, overlayMaps).addTo(map);
 function klikniecie(e){
+	console.log(kola);
 //alert("You clicked the map at " + e.latlng);
 if(flagi[0]===true){
 marki.addLayer(L.marker(e.latlng).on('click', klik2));
-marki.addTo(map);}
+marki.addTo(map);
+}
 if(flagi[2]===true){
 var tekst=prompt("Podaj tekst adnotacji");
 var pop=L.marker(e.latlng).bindPopup(tekst);
 adno.addLayer(pop);
 adno.addTo(map);
-pop.openPopup();}}
+pop.openPopup();}
+if(flagi[11]===true){
+	var tekst=prompt("Podaj promień koła");
+	try{
+	var promien=parseInt(tekst);
+	var kolor="#55A6CE";
+	var wypelnienie="#4BBDFC";
+	var circle = L.circle(e.latlng, promien, {
+    color: kolor,
+    fillColor: wypelnienie,
+    fillOpacity: 0.5
+	});
+	kola.addLayer(circle.on('click', klik2));
+	kola.addTo(map);
+	}
+	catch(err){
+		alert("Podano złą wartość!");
+	}
+}
+
+
+}
 map.on('click', klikniecie);
 var mojstyl = {
 "color": "#CE1A05",

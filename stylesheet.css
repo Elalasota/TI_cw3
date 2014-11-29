@@ -54,6 +54,7 @@ margin-bottom:6px;
 form{
 	font-size:12px;
 	margin-bottom:10px;
+	text-align:left;
 }
 #wms{
 	color:#001C03;
@@ -103,8 +104,11 @@ p{
 }
 #op{font-size:12px;}
 input{
+	text-align:center;
+	width:90%;
 	color:#245100;
 }
+
 #tresc{
 	background-color:#B4D09D;
 }
@@ -132,3 +136,12 @@ img{
 	margin:0 auto;
 height:50px;
 	width:240px;}
+#czas{margin-bottom:8px;}
+#przezroczystosc{width:12%;}
+#wyslij2{
+	margin:0 auto;
+	background-color:#2F913E;
+	margin-bottom:5px;
+	width:40%;
+	border-radius:5px;
+}
