@@ -22,13 +22,45 @@ var wart="";
 var style="";
 var wersja='1.1.1';
 var ukl=null;
-for(i=0;i<$('.przycisk').size();i++ ){
+for(i=0;i<$('.przycisk').size()+$('.przycisk2').size();i++ ){
 	flagi.push(false);}
 var dlugosc=flagi.length;
 function reset(){
 for(var i=0; i<dlugosc; i++){
 	flagi[i]=false;
 	}}
+	
+$(".przycisk2").click(function(){
+	var wartosc=$(this).html();
+	if (wartosc==="Marker"){
+	$("#ukryte1").toggle();
+	}
+	else if (wartosc==="Koło"){
+	$("#ukryte2").toggle();
+	}
+	else if (wartosc==="WMS"){
+	$("#ukryte4").toggle();
+	}
+	else if (wartosc==="Adnotacje"){
+	$("#ukryte3").toggle();
+	}
+	else if (wartosc==="Wirtualna wycieczka"){
+	flagi[8]=true;
+	$("#form2").toggle();
+	}
+else if (wartosc==="Usuń wycieczkę"){
+	flagi[9]=true;
+	$("#tresc").hide();
+	$("#strzalka_przod").hide();
+	$("#strzalka_tyl").hide();
+	$("#map").height("750px");
+	$("#start").hide();
+	if(myLayer){map.removeLayer(myLayer);}
+	}
+	else if (wartosc==="Przywróć zasięg"){
+	flagi[7]=true;
+	map.setView(widok,zum);}
+	});	
 $(".przycisk").click(function(){
 reset();
 var wartosc=$(this).html();
@@ -70,9 +102,7 @@ else if (wartosc==="Usuń warstwy WMS"){
 		console.log(kontrola[i]);
 		map.removeLayer(kontrola[i]);
 		war.removeLayer(kontrola[i]);}}
-else if (wartosc==="Przywróć zasięg"){
-	flagi[7]=true;
-	map.setView(widok,zum);}
+
 else if (wartosc==="Rysuj koło"){
 	flagi[11]=true;
 	}
@@ -80,22 +110,15 @@ else if (wartosc==="Usuń koła"){
 	flagi[12]=true;
 	kola.clearLayers();
 	}
-//else if (wartosc==="Usuń marker"){
-	//flagi[13]=true;
-	//}
-else if (wartosc==="Wirtualna wycieczka"){
-	flagi[8]=true;
-	$("#form2").toggle();
+else if (wartosc==="Usuń marker"){
+	flagi[13]=true;
 	}
-else if (wartosc==="Usuń wycieczkę"){
-	flagi[9]=true;
-	$("#tresc").hide();
-	$("#strzalka_przod").hide();
-	$("#strzalka_tyl").hide();
-	$("#map").height("750px");
-	if(myLayer){map.removeLayer(myLayer);}
-	}
+
 });
+$("#ukryte1").hide();
+$("#ukryte2").hide();
+$("#ukryte3").hide();
+$("#ukryte4").hide();
 var mar_czer=L.icon({iconUrl:'obrazy/marker.png', iconSize:[24, 32], iconAnchor:[12, 32], popupAnchor: [0, -20]});
 var zoo=L.icon({iconUrl:'obrazy/zoo.png', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor: [0, -20]});
 var fontanna=L.icon({iconUrl:'obrazy/fontanna.jpg', iconSize:[40, 32], iconAnchor:[20, 32], popupAnchor: [0, -20]});
@@ -300,7 +323,12 @@ function klik2(e){
 		var to=this.bindPopup(tekst).openPopup();
 	adno.addLayer(to);
 	flagi[3]=false;
-}}
+}
+if(flagi[13]===true){
+	marki.removeLayer(this);
+}
+
+}
 function wiadomosc(typ){
 	var wyn=true;
 	console.log(typ.length);

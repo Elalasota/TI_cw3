@@ -2,6 +2,7 @@
 	font-family: 'DejaVu Sans', 'Calibri';
 	color:#245100;
 	text-align:center;
+	font-size:12px;
 	}
 body {
 	background-color: #B4D09D;
@@ -42,17 +43,23 @@ body {
 width:100%;
 background-color:#9ACB58; 
 }
-.przycisk{
-color:#D9EAB3;
+.przycisk2{
+color:#D9EAA0;
 padding: 3px;
 border-radius:5px;
 width:95%;
-min-height:35px;
+min-height:20px;
 background-color:#2F913E; 
 margin-bottom:6px;
 }
+.przycisk{
+	width:95%;
+	margin-bottom:6px;
+	background-color:#E2EABD;
+	border-radius:5px;
+}
 form{
-	font-size:12px;
+	font-size:10px;
 	margin-bottom:10px;
 	text-align:left;
 }
@@ -83,26 +90,31 @@ h1{
 	background-color: #FFA4A0;
 }
 p{
+	text-align:center;
 	color:#245100;
-	font-size: 14px;
+	font-size: 10px;
 	margin:7px 20px;
 	text-indent:15px;
 }
 #wyslij{
 	margin:0 auto;
-	background-color:#2F913E;
+	background-color:#E2EABD;
 	margin-bottom:5px;
 	width:40%;
 	border-radius:5px;
 }
 #opcje{
+	text-align:center;
+	font-size:10px;
 	border-radius:5px;
 	margin:5px;
 	padding:4px;
 	border:solid;
 	border-color:#2F913E;
 }
-#op{font-size:12px;}
+#op{font-size:12px;
+text-align:center;
+}
 input{
 	text-align:center;
 	width:90%;
@@ -117,6 +129,7 @@ img{
 	width: 350px;
 }
 #start{
+	font-size:13px;
 	margin:0 auto;
 	padding-top:7px;
 	padding-bottom:7px;
@@ -137,10 +150,12 @@ img{
 height:50px;
 	width:240px;}
 #czas{margin-bottom:8px;}
-#przezroczystosc{width:12%;}
+#przezroczystosc{width:12%;
+font-size:10px;
+}
 #wyslij2{
 	margin:0 auto;
-	background-color:#2F913E;
+	background-color:#E2EABD;
 	margin-bottom:5px;
 	width:40%;
 	border-radius:5px;
