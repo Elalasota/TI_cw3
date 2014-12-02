@@ -372,6 +372,7 @@ if(flagi[11]===true){
 	var tekst=prompt("Podaj promień koła");
 	try{
 	var promien=parseInt(tekst);
+	if(promien>0){
 	var kolor="#55A6CE";
 	var wypelnienie="#4BBDFC";
 	var circle = L.circle(e.latlng, promien, {
@@ -381,7 +382,7 @@ if(flagi[11]===true){
 	});
 	kola.addLayer(circle.on('click', klik2));
 	kola.addTo(map);
-	}
+	}}
 	catch(err){
 		alert("Podano złą wartość!");
 	}
